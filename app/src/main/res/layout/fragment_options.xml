@@ -1,34 +1,80 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingTop="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="16dp"
-    tools:context="com.pgizka.simplecallrecorder.OptionsFragment">
+    android:padding="16dp"
+    tools:context="com.pgizka.simplecallrecorder.options.OptionsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/options_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/options_header_text"
+                android:id="@+id/textView"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/options_toggle_button_off"
+                android:textOn="@string/options_toggle_button_on"
+                android:id="@+id/options_toggle_button"
+                android:layout_below="@+id/textView"
+                android:layout_centerHorizontal="true" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:layout_centerHorizontal="true"
+                android:entries="@array/options_mode_array"
+                android:layout_below="@+id/options_toggle_button"
+                android:textSize="60sp"
+                />
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button"
+        android:layout_below="@+id/textView3" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add exception"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/options_header_text"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
+        android:text="Exceptions"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/options_card_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-
-        />
-
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOff="@string/options_toggle_button_off"
-        android:textOn="@string/options_toggle_button_on"
-        android:id="@+id/options_toggle_button"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="8dp"/>
 
 
 </RelativeLayout>

@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,14 +26,14 @@
         </activity>
 
         <provider
-            android:name=".com.pgizka.simplecallrecorder.data.RecorderProvider"
+            android:name=".data.RecorderProvider"
             android:authorities="com.pgizka.simplecallrecorder"
             android:enabled="true"
             android:exported="true" >
         </provider>
 
         <receiver
-            android:name=".CallReceiver"
+            android:name=".servicerecording.CallReceiver"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
@@ -43,23 +43,23 @@
         </receiver>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".util.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
 
         <service
-            android:name=".RecordingService"
+            android:name=".servicerecording.RecordingService"
             android:enabled="true"
             android:exported="true" >
         </service>
 
         <activity
-            android:name=".RecordingDetailActivity"
+            android:name=".recordings.RecordingDetailActivity"
             android:label="@string/title_activity_recording_detail"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".main.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pgizka.simplecallrecorder.MainActivity" />
+                android:value=".main.MainActivity" />
         </activity>
     </application>
 

@@ -35,7 +35,8 @@
         <receiver
             android:name=".servicerecording.CallReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
                 <action android:name="android.intent.action.PHONE_STATE" />
@@ -56,6 +57,14 @@
         <activity
             android:name=".recordings.RecordingDetailActivity"
             android:label="@string/title_activity_recording_detail"
+            android:parentActivityName=".contacts.ContactDetailActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".contacts.ContactDetailActivity" />
+        </activity>
+        <activity
+            android:name=".contacts.ContactDetailActivity"
+            android:label="@string/title_activity_contact_detail"
             android:parentActivityName=".main.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

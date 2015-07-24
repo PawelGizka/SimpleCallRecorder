@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,8 +76,8 @@ public class RecordingsAdapter extends CursorAdapter {
         String displayName = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME));
         String contactId = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_CONTACT_ID));
 
-        viewHolder.timeText.setText(getTime(date));
-        viewHolder.durationText.setText(Utils.formatTime(duration));
+        viewHolder.timeText.setText(Utils.formatTime(date));
+        viewHolder.durationText.setText(Utils.formatDuration(duration));
 
         if(type == RecorderContract.RecordEntry.TYPE_INCOMING){
             viewHolder.callImage.setImageResource(R.drawable.call_arrow_incoming);
@@ -110,15 +109,7 @@ public class RecordingsAdapter extends CursorAdapter {
 
     }
 
-    private String getDate(long time){
-        SimpleDateFormat format = new SimpleDateFormat("EEEEE dd MMMMM");
-        return format.format(time);
-    }
 
-    private String getTime(long time){
-        SimpleDateFormat format = new SimpleDateFormat("kk.mm");
-        return format.format(time);
-    }
 
 
 }

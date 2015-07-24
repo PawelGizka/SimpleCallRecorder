@@ -24,9 +24,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 RecorderContract.ContactEntry._ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " +
                 RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER + " TEXT NOT NULL, " +
                 RecorderContract.ContactEntry.COLUMN_RECORDED + " INTEGER, " +
-                RecorderContract.ContactEntry.COLUMN_IGNORED + " INTEGER " +
-                RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME + " TEXT " +
-                RecorderContract.ContactEntry.COLUMN_CONTACT_ID + " TEXT " +
+                RecorderContract.ContactEntry.COLUMN_IGNORED + " INTEGER, " +
+                RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME + " TEXT, " +
+                RecorderContract.ContactEntry.COLUMN_CONTACT_ID + " TEXT, " +
                 RecorderContract.ContactEntry.COLUMN_RECORD_NUMBER + " INTEGER )";
 
         String record = "CREATE TABLE " + RecorderContract.RecordEntry.TABLE_NAME + " ( " +

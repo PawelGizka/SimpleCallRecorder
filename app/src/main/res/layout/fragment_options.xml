@@ -37,7 +37,7 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"
+                android:id="@+id/options_spinner"
                 android:layout_centerHorizontal="true"
                 android:entries="@array/options_mode_array"
                 android:layout_below="@+id/options_toggle_button"
@@ -51,17 +51,17 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/options_list_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/button"
-        android:layout_below="@+id/textView3" />
+        android:layout_above="@+id/options_add_button"
+        android:layout_below="@+id/options_info_text" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add exception"
-        android:id="@+id/button"
+        android:id="@+id/options_add_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Exceptions"
-        android:id="@+id/textView3"
+        android:id="@+id/options_info_text"
         android:layout_below="@+id/options_card_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

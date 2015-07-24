@@ -32,6 +32,8 @@ public class RecordingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
+
+
         listView = (ListView) view.findViewById(R.id.recordings_list_viev);
 
         Cursor cursor = getActivity().getContentResolver().query(

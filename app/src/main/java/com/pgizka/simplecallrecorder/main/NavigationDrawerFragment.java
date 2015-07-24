@@ -81,6 +81,9 @@ public class NavigationDrawerFragment extends Fragment {
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
+            Log.d(TAG, "saved instance is not null current position " + mCurrentSelectedPosition);
+        } else {
+            Log.d(TAG, "saved instance is null");
         }
 
         // Select either the default item (0) or the last selected item.
@@ -236,8 +239,9 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        Log.d(TAG, "on save instance");
+        super.onSaveInstanceState(outState);
     }
 
     @Override

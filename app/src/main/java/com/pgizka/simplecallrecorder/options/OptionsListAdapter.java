@@ -1,17 +1,28 @@
 package com.pgizka.simplecallrecorder.options;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pgizka.simplecallrecorder.R;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
+import com.pgizka.simplecallrecorder.util.Utils;
+
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by Paweł on 2015-07-20.
@@ -19,10 +30,12 @@ import com.pgizka.simplecallrecorder.data.RecorderContract;
 public class OptionsListAdapter extends CursorAdapter {
     static final String TAG = OptionsListAdapter.class.getSimpleName();
     OnDeleteButtonClickListener clickListener;
+    ListView listView;
 
-    public OptionsListAdapter(Context context, Cursor c, OnDeleteButtonClickListener listener) {
+    public OptionsListAdapter(Context context, Cursor c, OnDeleteButtonClickListener listener, ListView listView) {
         super(context, c);
         clickListener = listener;
+        this.listView = listView;
     }
 
     static class ViewHolder{
@@ -46,24 +59,52 @@ public class OptionsListAdapter extends CursorAdapter {
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
 
+        return view;
+    }
+
+    @Override
+    public void bindView(View view, Context context, final Cursor cursor) {
+        final ViewHolder viewHolder = (ViewHolder) view.getTag();
+
         viewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = cursor.getInt(cursor.getColumnIndex(RecorderContract.ContactEntry._ID));
-                if(clickListener != null){
+                if (clickListener != null) {
+                    cursor.moveToPosition(listView.getPositionForView(viewHolder.deleteButton));
+                    int id = cursor.getInt(cursor.getColumnIndex(RecorderContract.ContactEntry._ID));
                     clickListener.onClick(id);
                 }
             }
         });
 
-        return view;
-    }
+        String phoneNumber = cursor.getString(cursor.getColumnIndex(
+                RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER));
+        String displayName = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME));
+        String contactId = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_CONTACT_ID));
 
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        if (displayName != null) {
+            viewHolder.displayNameText.setText(displayName);
+            viewHolder.phoneText.setVisibility(View.VISIBLE);
+            viewHolder.phoneText.setText(phoneNumber);
+        } else {
+            viewHolder.displayNameText.setText(phoneNumber);
+            viewHolder.phoneText.setVisibility(View.GONE);
+        }
+
+        if (contactId != null && !TextUtils.isEmpty(contactId)) {
+            Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(contactId));
+            InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(), uri);
+            if (input != null) {
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                viewHolder.mainImage.setImageBitmap(bitmap);
+            } else {
+                viewHolder.mainImage.setImageResource(R.drawable.defult_contact_image);
+            }
+        } else {
+            viewHolder.mainImage.setImageResource(R.drawable.defult_contact_image);
 
 
+        }
     }
 
     public static interface OnDeleteButtonClickListener{

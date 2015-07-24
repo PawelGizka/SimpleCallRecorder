@@ -2,6 +2,7 @@ package com.pgizka.simplecallrecorder.recordings;
 
 
 import android.content.ContentUris;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,11 +12,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.pgizka.simplecallrecorder.R;
+import com.pgizka.simplecallrecorder.contacts.ContactDetailActivity;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
 import com.pgizka.simplecallrecorder.util.Utils;
 
@@ -35,7 +39,6 @@ import java.text.SimpleDateFormat;
 
 public class RecordingDetailFragment extends Fragment {
     static final String TAG = RecordingDetailFragment.class.getSimpleName();
-    static final String URI_ARG = "uriArg";
 
     ImageView mainImage, callImage, playPauseImage;
     TextView dateText, durationText, sizeText, playDurationText, playPositionText;
@@ -55,13 +58,6 @@ public class RecordingDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RecordingDetailFragment newInstance(Uri uri){
-        RecordingDetailFragment fragment = new RecordingDetailFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(URI_ARG, uri);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,10 +114,9 @@ public class RecordingDetailFragment extends Fragment {
             }
         });
 
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            uri = bundle.getParcelable(URI_ARG);
-        }
+        uri = getActivity().getIntent().getData();
+
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -179,7 +174,7 @@ public class RecordingDetailFragment extends Fragment {
         String dateFormated = new SimpleDateFormat("HH:mm dd MMM").format(date);
         dateText.setText(dateFormated);
 
-        String durationFormated = Utils.formatTime(duration);
+        String durationFormated = Utils.formatDuration(duration);
         durationText.setText(durationFormated);
         playDurationText.setText(durationFormated);
 
@@ -220,7 +215,7 @@ public class RecordingDetailFragment extends Fragment {
         int progress = mediaPlayer.getCurrentPosition() * 100 / mediaPlayer.getDuration();
         Log.d(TAG, "progress is " + progress);
         seekBar.setProgress(progress);
-        playPositionText.setText(Utils.formatTime(mediaPlayer.getCurrentPosition()/1000));
+        playPositionText.setText(Utils.formatDuration(mediaPlayer.getCurrentPosition() / 1000));
         if(progress < 99) {
             handler.postDelayed(playerRun, 1000);
         }
@@ -242,6 +237,20 @@ public class RecordingDetailFragment extends Fragment {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                cursor.moveToFirst();
+                int id = cursor.getInt(cursor.getColumnIndex(RecorderContract.RecordEntry.COLUMN_CONTACT_KEY));
+                Uri uri = RecorderContract.buildRecordItem(RecorderContract.getContentUri(RecorderContract.PATH_CONTACT), id);
+                Intent upIntent = new Intent(getActivity(), ContactDetailActivity.class);
+                upIntent.setData(uri);
+                NavUtils.navigateUpTo(getActivity(), upIntent);
+                return true;
+        }
 
 
+        return super.onOptionsItemSelected(item);
+    }
 }

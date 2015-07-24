@@ -24,6 +24,9 @@ public class RecorderProvider extends ContentProvider {
 
     static final int RECORD_WITH_CONTACT_ITEM = 300;
     static final int RECORD_WITH_CONTACT_DIR = 301;
+
+    static final int CONTACT_COUNT_RECORDS = 400;
+
     //static final int RECORD_WITH_CONTACT_WITH_SEPARATORS_DIR = 302;
 
     //This is an inner join which looks like
@@ -35,6 +38,7 @@ public class RecorderProvider extends ContentProvider {
                     "." + RecorderContract.RecordEntry.COLUMN_CONTACT_KEY +
                     " = " + RecorderContract.ContactEntry.TABLE_NAME +
                     "." + RecorderContract.ContactEntry._ID;
+
 
     static UriMatcher buildUriMatcher() {
 
@@ -48,6 +52,7 @@ public class RecorderProvider extends ContentProvider {
         matcher.addURI(authority, RecorderContract.PATH_RECORD + "/#", RECORD_ITEM);
         matcher.addURI(authority, RecorderContract.PATH_RECORD_WITH_CONTACT, RECORD_WITH_CONTACT_DIR);
         matcher.addURI(authority, RecorderContract.PATH_RECORD_WITH_CONTACT + "/#", RECORD_WITH_CONTACT_ITEM);
+        matcher.addURI(authority, RecorderContract.PATH_CONTACT_COUNT_RECORDS, CONTACT_COUNT_RECORDS);
         //matcher.addURI(authority, RecorderContract.PATH_RECORD_WITH_CONTACT_WITH_SEPARATORS,
         //											RECORD_WITH_CONTACT_WITH_SEPARATORS_DIR);
 
@@ -165,6 +170,7 @@ public class RecorderProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        String groupBy = null, having = null;
         Cursor cursor;
         int code = sUriMatcher.match(uri);
         switch (code) {
@@ -191,6 +197,12 @@ public class RecorderProvider extends ContentProvider {
                 queryBuilder.setTables(recordWithContactJoin);
                 queryBuilder.appendWhere(RecorderContract.RecordEntry.TABLE_NAME + "." + RecorderContract.RecordEntry._ID + " = " +
                         uri.getLastPathSegment());
+                break;
+            case CONTACT_COUNT_RECORDS:
+                queryBuilder.setTables(recordWithContactJoin);
+                String[] newProjection = {"COUNT(" + RecorderContract.RecordEntry.COLUMN_CONTACT_KEY + ")"};
+                projection = newProjection;
+                groupBy = RecorderContract.RecordEntry.COLUMN_CONTACT_KEY;
                 break;
             //case RECORD_WITH_CONTACT_WITH_SEPARATORS_DIR:
             //	queryBuilder = recordWithContactQueryBuilder;
@@ -221,9 +233,10 @@ public class RecorderProvider extends ContentProvider {
                 projection,
                 selection,
                 selectionArgs,
-                null,
-                null,
+                groupBy,
+                having,
                 sortOrder);
+
 
 		/*
 		if(code != RECORD_DIR && code != RECORD_ITEM){

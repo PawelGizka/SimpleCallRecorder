@@ -17,6 +17,7 @@ public class RecorderContract {
     public static final String PATH_CONTACT = "contact";
     public static final String PATH_RECORD = "record";
     public static final String PATH_RECORD_WITH_CONTACT = "recordWithContact";
+    public static final String PATH_CONTACT_COUNT_RECORDS = "contactCountRecords";
     //public static final String PATH_RECORD_WITH_CONTACT_WITH_SEPARATORS = "recordWithContactWithSeparators";
 
     public static final class ContactEntry implements BaseColumns {
@@ -66,6 +67,14 @@ public class RecorderContract {
         return ContentUris.withAppendedId(uri, id);
     }
 
-
+    public static final String ConactWithOneRecordWhere =
+            RecorderContract.RecordEntry.TABLE_NAME +
+            "." + RecorderContract.RecordEntry.COLUMN_DATE +
+            " = " + "(SELECT MAX(" + RecorderContract.RecordEntry.COLUMN_DATE + ")" +
+            " FROM " + RecorderContract.RecordEntry.TABLE_NAME +
+            " WHERE " + RecorderContract.RecordEntry.TABLE_NAME +
+            "." + RecorderContract.RecordEntry.COLUMN_CONTACT_KEY +
+            " = " + RecorderContract.ContactEntry.TABLE_NAME +
+            "." + RecorderContract.ContactEntry._ID + ")";
 
 }

@@ -1,4 +1,4 @@
-package com.pgizka.simplecallrecorder.recordings;
+package com.pgizka.simplecallrecorder.contacts;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -8,24 +8,22 @@ import android.view.MenuItem;
 
 import com.pgizka.simplecallrecorder.R;
 
-
-public class RecordingDetailActivity extends ActionBarActivity {
+public class ContactDetailActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recording_detail);
+        setContentView(R.layout.activity_contact_detail);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
 
-        getSupportFragmentManager().beginTransaction().
-                add(R.id.container_recordings_detail, new RecordingDetailFragment()).commit();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recording_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_contact_detail, menu);
         return true;
     }
 

@@ -8,7 +8,6 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/contacts_list"
-        android:layout_gravity="center" />
+        android:id="@+id/contacts_list" />
 
 </FrameLayout>

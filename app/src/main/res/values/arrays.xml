@@ -5,4 +5,30 @@
         <item>Record only selected</item>
     </string-array>
 
+    <string-array name="settings_recording_source">
+        <item>VOICE CALL</item>
+        <item>VOICE DOWNLINK</item>
+        <item>VOICE UPLINK</item>
+        <item>MICROPHONE</item>
+    </string-array>
+
+    <string-array name="settings_recording_source_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="settigns_recording_format">
+        <item>AMR</item>
+        <item>3GPP</item>
+        <item>AAC</item>
+    </string-array>
+
+    <string-array name="settings_redording_format_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

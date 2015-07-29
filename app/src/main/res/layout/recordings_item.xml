@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/AppTheme">
+    style="@style/AppTheme"
+    >
 
 
     <android.support.v7.widget.CardView
@@ -15,9 +16,12 @@
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="6dp"
-        android:layout_margin="0dp">
+
+        android:layout_margin="0dp"
+        android:layout_below="@+id/recordings_item_separator">
 
         <RelativeLayout
+            android:id="@+id/recording_item_main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="0dp">
@@ -60,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Large Text"
-                android:id="@+id/recording_item_time_text"
+                android:id="@+id/recording_item_duration_text"
                 android:layout_alignBottom="@+id/recording_item_phone_text"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -80,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/recording_item_duration_text"
+                android:id="@+id/recording_item_time_text"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/recording_item_call_image"
@@ -88,6 +92,28 @@
                 android:layout_marginRight="8dp"/>
 
         </RelativeLayout>
+
+
+
     </android.support.v7.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/recordings_item_separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#bbdefb"
+        android:layout_marginBottom="4dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="poniedziałek 21 czerca"
+            android:id="@+id/recordins_item_separator_text"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

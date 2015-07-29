@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="ANDROID.PERMISSION.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -36,8 +37,7 @@
         <receiver
             android:name=".servicerecording.CallReceiver"
             android:enabled="true"
-            android:exported="true"
-            >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
                 <action android:name="android.intent.action.PHONE_STATE" />
@@ -70,6 +70,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
+        </activity>
+        <activity
+            android:theme="@style/ToolbarTheme"
+            android:parentActivityName=".recordings.RecordingDetailActivity"
+            android:name=".recordings.ToolbarTestActivity"
+            android:label="@string/title_activity_toolbar_test" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".recordings.RecordingDetailActivity" />
         </activity>
     </application>
 

@@ -3,22 +3,33 @@ package com.pgizka.simplecallrecorder.recordings;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.pgizka.simplecallrecorder.R;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
 
+import java.util.ArrayList;
 
-public class RecordingsFragment extends Fragment {
+
+public class RecordingsFragment extends Fragment implements ActionMode.Callback {
     static  final String TAG = RecordingsFragment.class.getSimpleName();
 
     ListView listView;
+    RecordingsAdapter recordingsAdapter;
+
+    ActionMode actionMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,32 +43,114 @@ public class RecordingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
-
-
         listView = (ListView) view.findViewById(R.id.recordings_list_viev);
 
-        Cursor cursor = getActivity().getContentResolver().query(
-                RecorderContract.getContentUri(RecorderContract.PATH_RECORD_WITH_CONTACT),
-                null, null, null, null);
-        RecordingsAdapter recordingsAdapter = new RecordingsAdapter(getActivity(), cursor);
-        listView.setAdapter(recordingsAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onListItemClicked(id);
+                onListItemClicked(view, position, id);
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                onListItemLongClicked(view, position, id);
+                return true;
+            }
+        });
+
+
 
         return view;
     }
 
-    private void onListItemClicked(long id){
-        Intent intent = new Intent(getActivity(), RecordingDetailActivity.class);
-        intent.setData(RecorderContract.buildRecordItem(RecorderContract.getContentUri(
-                RecorderContract.PATH_RECORD_WITH_CONTACT),id));
-        startActivity(intent);
+    private void onListItemClicked(View view, int position, long id){
+        if(actionMode == null) {
+            Intent intent = new Intent(getActivity(), RecordingDetailActivity.class);
+            intent.setData(RecorderContract.buildRecordItem(RecorderContract.getContentUri(
+                    RecorderContract.PATH_RECORD_WITH_CONTACT), id));
+            startActivity(intent);
+        } else {
+            boolean select = recordingsAdapter.getItemSelected(position) ? false : true;
+            recordingsAdapter.setItemSelected(position, id, select);
+
+            if(recordingsAdapter.getSelectedCount() == 0){
+                actionMode.finish();
+            } else {
+                setActionModeTitle();
+            }
+
+        }
     }
 
+    private void onListItemLongClicked(View view, int position, long id){
+        if(actionMode == null) {
+            boolean select = recordingsAdapter.getItemSelected(position) ? false : true;
+            recordingsAdapter.setItemSelected(position, id, select);
 
+            ActionBarActivity activity = (ActionBarActivity) getActivity();
+            actionMode = activity.startSupportActionMode(this);
+            setActionModeTitle();
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    private void setActionModeTitle(){
+        actionMode.setTitle(String.valueOf(recordingsAdapter.getSelectedCount()) + " " + "selected");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateListView();
+    }
+
+    private void updateListView(){
+        String order = RecorderContract.RecordEntry.TABLE_NAME + "." + RecorderContract.RecordEntry._ID + " DESC";
+        Cursor cursor = getActivity().getContentResolver().query(
+                RecorderContract.getContentUri(RecorderContract.PATH_RECORD_WITH_CONTACT),
+                null, null, null, order);
+
+        recordingsAdapter = new RecordingsAdapter(getActivity(), cursor);
+        listView.setAdapter(recordingsAdapter);
+
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.action_mode, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_mode_delete:
+                ArrayList<Long> selectedIds = recordingsAdapter.getSelectedIds();
+                for(Long id : selectedIds){
+                    Uri uri = Uri.withAppendedPath(RecorderContract.getContentUri(RecorderContract.PATH_RECORD),
+                            Long.toString(id));
+                    getActivity().getContentResolver().delete(uri, null, null);
+                }
+                actionMode.finish();
+                updateListView();
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        actionMode = null;
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        recordingsAdapter.clearSelected();
+    }
 }

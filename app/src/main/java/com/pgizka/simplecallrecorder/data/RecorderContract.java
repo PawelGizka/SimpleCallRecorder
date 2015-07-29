@@ -56,6 +56,7 @@ public class RecorderContract {
         public static final String COLUMN_LENGTH = "length";
         public static final String COLUMN_PATH = "path";
         public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_NOTES = "notes";
 
     }
 

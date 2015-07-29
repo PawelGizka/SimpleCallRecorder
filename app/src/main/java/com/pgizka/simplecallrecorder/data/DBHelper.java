@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "callRecorder.db";
-    public static final int DB_VERSION = 6;
+    public static final int DB_VERSION = 7;
 
 
     public DBHelper(Context context){
@@ -36,6 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 RecorderContract.RecordEntry.COLUMN_LENGTH + " INTEGER, " +
                 RecorderContract.RecordEntry.COLUMN_DATE + " LONG, " +
                 RecorderContract.RecordEntry.COLUMN_TYPE + " INTEGER, " +
+                RecorderContract.RecordEntry.COLUMN_NOTES + " TEXT, " +
                 " FOREIGN KEY (" + RecorderContract.RecordEntry.COLUMN_CONTACT_KEY + ") REFERENCES " +
                 RecorderContract.ContactEntry.TABLE_NAME + " (" + RecorderContract.ContactEntry._ID + "))";
 
@@ -51,8 +52,8 @@ public class DBHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS " + RecorderContract.RecordEntry.TABLE_NAME);
         //db.execSQL("DROP TABLE IF EXISTS " + RecorderContract.ContactEntry.TABLE_NAME);
 
-        //db.execSQL("ALTER TABLE " + RecorderContract.ContactEntry.TABLE_NAME + " ADD COLUMN " +
-       //             RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME + " TEXT ");
+        db.execSQL("ALTER TABLE " + RecorderContract.RecordEntry.TABLE_NAME + " ADD COLUMN " +
+                RecorderContract.RecordEntry.COLUMN_NOTES + " TEXT ");
         //db.execSQL("ALTER TABLE " + RecorderContract.ContactEntry.TABLE_NAME + " ADD COLUMN " +
         //        RecorderContract.ContactEntry.COLUMN_CONTACT_ID + " TEXT ");
         //db.execSQL("ALTER TABLE " + RecorderContract.ContactEntry.TABLE_NAME + " ADD COLUMN " +

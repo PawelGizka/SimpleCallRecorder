@@ -220,11 +220,12 @@ public class RecorderProvider extends ContentProvider {
                     RecorderContract.RecordEntry.COLUMN_LENGTH,
                     RecorderContract.RecordEntry.COLUMN_DATE,
                     RecorderContract.RecordEntry.COLUMN_TYPE,
+                    RecorderContract.RecordEntry.COLUMN_NOTES,
                     RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER,
                     RecorderContract.ContactEntry.COLUMN_RECORDED,
                     RecorderContract.ContactEntry.COLUMN_IGNORED,
                     RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME,
-                    RecorderContract.ContactEntry.COLUMN_CONTACT_ID};
+                    RecorderContract.ContactEntry.COLUMN_CONTACT_ID,};
             projection = newProjection;
         }
 

@@ -24,5 +24,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_contact_detail">Contact Details</string>
+    <string name="title_activity_toolbar_test">ToolbarTestActivity</string>
 
 </resources>

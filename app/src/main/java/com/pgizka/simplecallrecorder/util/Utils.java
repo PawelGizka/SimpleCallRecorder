@@ -1,7 +1,17 @@
 package com.pgizka.simplecallrecorder.util;
 
+import android.content.ContentUris;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.pgizka.simplecallrecorder.R;
+
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 
 /**
@@ -60,4 +70,19 @@ public class Utils {
         return normalizedPhoneNumber;
     }
 
+    public static Bitmap getDisplayImage(Context context, String contactId) {
+        Bitmap bitmap = null;
+        if (contactId != null && !TextUtils.isEmpty(contactId)) {
+            Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(contactId));
+            InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(), uri);
+            if (input != null) {
+                bitmap = BitmapFactory.decodeStream(input);
+            } else {
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.defult_contact_image);
+            }
+        } else {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.defult_contact_image);
+        }
+        return bitmap;
+    }
 }

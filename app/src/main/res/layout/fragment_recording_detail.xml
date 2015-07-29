@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.pgizka.simplecallrecorder.recordings.RecordingDetailFragment"
-    android:padding="8dp"
+
     >
 
 
@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        card_view:cardElevation="8dp"
-        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="0dp"
         >
 
         <android.support.v7.widget.GridLayout
@@ -34,8 +34,6 @@
 
             <ImageView
                 android:id="@+id/recording_detail_main_image"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:src="@drawable/defult_contact_image"
@@ -129,8 +127,9 @@
         android:layout_below="@id/recording_detail_card_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         app:columnCount="2"
+        android:padding="8dp"
 
         >
 
@@ -157,12 +156,13 @@
             >
         </Button>
 
+        <!--
         <Button
             android:id="@+id/recording_detail_call_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Call"
-            android:drawableTop="@drawable/ic_action_call"
+            android:drawableTop="@drawable/ic_action_call_light"
             app:layout_columnWeight="1"
             >
         </Button>
@@ -172,10 +172,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Message"
-            android:drawableTop="@drawable/ic_action_email"
+            android:drawableTop="@drawable/ic_action_email_light"
             app:layout_columnWeight="1"
             >
         </Button>
+
+        -->
+
         <!--
         <Button
             android:layout_width="wrap_content"
@@ -198,7 +201,7 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/recording_detail_notes_edit_text"
             android:hint="Add notes"
             app:layout_columnWeight="1"
             app:layout_columnSpan="2"/>
@@ -214,6 +217,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         card_view:cardElevation="2dp"
+        card_view:cardCornerRadius="2dp"
+        android:layout_margin="8dp"
 
         >
         <RelativeLayout

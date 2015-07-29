@@ -3,6 +3,7 @@ package com.pgizka.simplecallrecorder.recordings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,6 +11,7 @@ import com.pgizka.simplecallrecorder.R;
 
 
 public class RecordingDetailActivity extends ActionBarActivity {
+    static final String TAG = RecordingDetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,30 +19,11 @@ public class RecordingDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_recording_detail);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
-
-        getSupportFragmentManager().beginTransaction().
-                add(R.id.container_recordings_detail, new RecordingDetailFragment()).commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recording_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().
+                    add(R.id.container_recordings_detail, new RecordingDetailFragment()).commit();
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
+
 }

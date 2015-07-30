@@ -39,8 +39,8 @@ public class RecordingService extends Service {
     static final int NOTIFICATION_RECORDING = 0;
     static final int NOTIFICATION_CALL_RECORDED = 1;
 
-    MediaRecorder recorder;
-    File audiofile;
+    MediaRecorder recorder, recorderMic;
+    File audiofile, audioFileMic;
     boolean recordstarted = false;
 
     Bundle bundle;
@@ -48,8 +48,9 @@ public class RecordingService extends Service {
 
     String phoneNumber;
     boolean wasIncoming = false;
-    String fileName;
+    String fileName, fileNameMic;
     long startedTime;
+    int recordingSource;
 
     NotificationManager notificationManager;
     boolean updateNotification = false;
@@ -156,7 +157,8 @@ public class RecordingService extends Service {
 
 
         if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-            int recordingSource = Integer.parseInt(userPref.getString(PreferanceStrings.USER_RECORDING_SOURCE, "0"));
+
+            recordingSource = Integer.parseInt(userPref.getString(PreferanceStrings.USER_RECORDING_SOURCE, "0"));
             int recordingFormat = Integer.parseInt(userPref.getString(PreferanceStrings.USER_RECORDING_FORMAT, "0"));
             String recordingPath = userPref.getString(PreferanceStrings.USER_RECORDING_PATH, "/sdcard/simpleCallRecorder");
             boolean turnOnPhone = userPref.getBoolean(PreferanceStrings.USER_TURN_ON_PHONE, false);
@@ -181,21 +183,40 @@ public class RecordingService extends Service {
                     break;
             }
 
+            if(recordingSource >= 0 && recordingSource <= 2){
+                recorderMic = new MediaRecorder();
+                recorderMic.setAudioSource(MediaRecorder.AudioSource.MIC);
+            } else {
+                recorderMic = null;
+            }
+
             switch (recordingFormat){
                 case 0:
                     recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
                     audioSufix = ".amr";
+                    if(recorderMic != null){
+                        recorderMic.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
+                        recorderMic.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                    }
                     break;
                 case 1:
                     recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
                     audioSufix = ".3gp";
+                    if(recorderMic != null){
+                        recorderMic.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                        recorderMic.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                    }
                     break;
                 case 2:
                     recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                     audioSufix = ".aac";
+                    if(recorderMic != null){
+                        recorderMic.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+                        recorderMic.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                    }
                     break;
             }
 
@@ -225,6 +246,10 @@ public class RecordingService extends Service {
                 fileName += "_Outgoing";
             }
 
+            if(recorderMic != null){
+                fileNameMic = fileName + "_MIC";
+            }
+
             //File sampleDir = new File(Environment.getExternalStorageDirectory(), "SimpleCallRecorder");
             File sampleDir = new File(recordingPath);
             if (!sampleDir.exists()) {
@@ -234,13 +259,22 @@ public class RecordingService extends Service {
             Log.d(TAG, "file name is: " + fileName);
             try {
                 audiofile = File.createTempFile(fileName, audioSufix, sampleDir);
+                if(recorderMic != null){
+                    audioFileMic = File.createTempFile(fileNameMic, audioSufix, sampleDir);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             recorder.setOutputFile(audiofile.getAbsolutePath());
+            if(recorderMic != null){
+                recorderMic.setOutputFile(audioFileMic.getAbsolutePath());
+            }
             try {
                 recorder.prepare();
+                if(recorderMic != null){
+                    recorderMic.prepare();
+                }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Recorder threw exception", Toast.LENGTH_LONG).show();
@@ -249,14 +283,20 @@ public class RecordingService extends Service {
                 Toast.makeText(this, "Recorder threw exception", Toast.LENGTH_LONG).show();
             }
             recorder.start();
+            if(recorderMic != null){
+                recorderMic.start();
+            }
             recordstarted = true;
         } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-
 
             if (recordstarted) {
                 Log.d(TAG, "recordre stoped");
                 recorder.stop();
                 recorder.release();
+                if(recorderMic != null){
+                    recorderMic.stop();
+                    recorderMic.release();
+                }
                 recordstarted = false;
             }
 
@@ -284,11 +324,30 @@ public class RecordingService extends Service {
                 contactId = contactCursor.getInt(contactCursor.getColumnIndex(RecorderContract.ContactEntry._ID));
             }
 
+            //check wheater recording from source other then mic was successful
+            String path;
+            int recordingVoiceError;
+            if(audiofile.length() < 20 && recorderMic != null){
+                path = audioFileMic.getAbsolutePath();
+                recordingVoiceError = 1;
+                recordingSource = 3;
+                audiofile.delete();
+                SharedPreferences.Editor editor = userPref.edit();
+                editor.putString(PreferanceStrings.USER_RECORDING_SOURCE, "3");
+                editor.commit();
+            } else {
+                path = audiofile.getAbsolutePath();
+                recordingVoiceError = 0;
+                audioFileMic.delete();
+            }
+
             ContentValues contentValues = new ContentValues();
             contentValues.put(RecorderContract.RecordEntry.COLUMN_CONTACT_KEY, contactId);
             contentValues.put(RecorderContract.RecordEntry.COLUMN_DATE, startedTime);
             contentValues.put(RecorderContract.RecordEntry.COLUMN_LENGTH, conversationDuration);
-            contentValues.put(RecorderContract.RecordEntry.COLUMN_PATH, audiofile.getAbsolutePath());
+            contentValues.put(RecorderContract.RecordEntry.COLUMN_PATH, path);
+            contentValues.put(RecorderContract.RecordEntry.COLUMN_SOURCE, recordingSource);
+            contentValues.put(RecorderContract.RecordEntry.COLUMN_SOURCE_ERROR, recordingVoiceError);
             if(wasIncoming) {
                 contentValues.put(RecorderContract.RecordEntry.COLUMN_TYPE, RecorderContract.RecordEntry.TYPE_INCOMING);
             } else {

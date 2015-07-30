@@ -43,6 +43,11 @@ public class RecorderContract {
         public static int TYPE_OUTGOING = 0;
         public static int TYPE_INCOMING = 1;
 
+        public static int SOURCE_VOICE_CALL = 0;
+        public static int SOURCE_DOWNLINK = 1;
+        public static int SOURCE_UPLINK = 2;
+        public static int SOURCE_MIC = 3;
+
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_RECORD;
         public static final String CONTENT_ITEM_TYPE =
@@ -57,7 +62,8 @@ public class RecorderContract {
         public static final String COLUMN_PATH = "path";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_NOTES = "notes";
-
+        public static final String COLUMN_SOURCE = "source";
+        public static final String COLUMN_SOURCE_ERROR = "source_error";
     }
 
     public static final Uri getContentUri(String path){

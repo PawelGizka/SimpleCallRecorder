@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.TextUtils;
 import android.util.Log;
@@ -222,6 +223,8 @@ public class RecordingDetailFragment extends Fragment {
         String displayName = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME));
         String contactId = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_CONTACT_ID));
         notesInitial = cursor.getString(cursor.getColumnIndex(RecorderContract.RecordEntry.COLUMN_NOTES));
+        int recordingSource = cursor.getInt(cursor.getColumnIndex(RecorderContract.RecordEntry.COLUMN_SOURCE));
+        int recordingError = cursor.getInt(cursor.getColumnIndex(RecorderContract.RecordEntry.COLUMN_SOURCE_ERROR));
 
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         if(displayName != null && !TextUtils.isEmpty(displayName)) {
@@ -260,6 +263,25 @@ public class RecordingDetailFragment extends Fragment {
         if(notesInitial != null) {
             notesEditText.setText(notesInitial);
         }
+
+        if(recordingError == 1){
+            String[] source = getResources().getStringArray(R.array.settings_recording_source);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Recording source error")
+                    .setMessage("Recording using " + source[recordingSource] + " went wrong, recording " +
+                            "was recorded using Microphone. Your phone may not be able to record using " +
+                            source[recordingSource])
+                    .setPositiveButton("Ok", null);
+            builder.create().show();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(RecorderContract.RecordEntry.COLUMN_SOURCE, RecorderContract.RecordEntry.SOURCE_MIC);
+            contentValues.put(RecorderContract.RecordEntry.COLUMN_SOURCE_ERROR, 0);
+            String id = String.valueOf(cursor.getInt(0));
+            Uri uri = Uri.withAppendedPath(RecorderContract.getContentUri(RecorderContract.PATH_RECORD), id);
+            getActivity().getContentResolver().update(uri, contentValues, null, null);
+        }
+
     }
 
     private void onPlayPauseImage(){

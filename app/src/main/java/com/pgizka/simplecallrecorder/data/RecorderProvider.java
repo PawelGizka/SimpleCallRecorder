@@ -221,6 +221,8 @@ public class RecorderProvider extends ContentProvider {
                     RecorderContract.RecordEntry.COLUMN_DATE,
                     RecorderContract.RecordEntry.COLUMN_TYPE,
                     RecorderContract.RecordEntry.COLUMN_NOTES,
+                    RecorderContract.RecordEntry.COLUMN_SOURCE,
+                    RecorderContract.RecordEntry.COLUMN_SOURCE_ERROR,
                     RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER,
                     RecorderContract.ContactEntry.COLUMN_RECORDED,
                     RecorderContract.ContactEntry.COLUMN_IGNORED,

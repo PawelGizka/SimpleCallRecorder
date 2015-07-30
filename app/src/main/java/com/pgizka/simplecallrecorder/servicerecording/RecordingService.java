@@ -1,5 +1,7 @@
 package com.pgizka.simplecallrecorder.servicerecording;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,12 +13,18 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.pgizka.simplecallrecorder.R;
+import com.pgizka.simplecallrecorder.main.MainActivity;
+import com.pgizka.simplecallrecorder.recordings.RecordingDetailActivity;
 import com.pgizka.simplecallrecorder.util.PreferanceStrings;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
 import com.pgizka.simplecallrecorder.util.Utils;
@@ -25,8 +33,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+
 public class RecordingService extends Service {
     static final String TAG = RecordingService.class.getSimpleName();
+    static final int NOTIFICATION_RECORDING = 0;
+    static final int NOTIFICATION_CALL_RECORDED = 1;
 
     MediaRecorder recorder;
     File audiofile;
@@ -40,10 +51,15 @@ public class RecordingService extends Service {
     String fileName;
     long startedTime;
 
+    NotificationManager notificationManager;
+    boolean updateNotification = false;
+    Handler handler = new Handler();
+
     @Override
     public void onCreate() {
         super.onCreate();
         recorder = new MediaRecorder();
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Log.d(TAG, "on created");
     }
 
@@ -198,6 +214,8 @@ public class RecordingService extends Service {
             Log.d(TAG, "Call started");
 
             Toast.makeText(this, "Call started", Toast.LENGTH_LONG).show();
+            startedTime = System.currentTimeMillis();
+            showRecordingNotification();
 
             fileName = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss").format(System.currentTimeMillis());
 
@@ -232,10 +250,9 @@ public class RecordingService extends Service {
             }
             recorder.start();
             recordstarted = true;
-            startedTime = System.currentTimeMillis();
         } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
 
-            Toast.makeText(this, "REJECT || DISCO", Toast.LENGTH_LONG).show();
+
             if (recordstarted) {
                 Log.d(TAG, "recordre stoped");
                 recorder.stop();
@@ -244,7 +261,6 @@ public class RecordingService extends Service {
             }
 
             int conversationDuration = (int) ((System.currentTimeMillis() - startedTime)/1000);
-            startedTime = 0;
 
             String selection = RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER + " = ?";
             String [] selectionArgs = {phoneNumber};
@@ -270,7 +286,7 @@ public class RecordingService extends Service {
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(RecorderContract.RecordEntry.COLUMN_CONTACT_KEY, contactId);
-            contentValues.put(RecorderContract.RecordEntry.COLUMN_DATE, System.currentTimeMillis());
+            contentValues.put(RecorderContract.RecordEntry.COLUMN_DATE, startedTime);
             contentValues.put(RecorderContract.RecordEntry.COLUMN_LENGTH, conversationDuration);
             contentValues.put(RecorderContract.RecordEntry.COLUMN_PATH, audiofile.getAbsolutePath());
             if(wasIncoming) {
@@ -278,12 +294,76 @@ public class RecordingService extends Service {
             } else {
                 contentValues.put(RecorderContract.RecordEntry.COLUMN_TYPE, RecorderContract.RecordEntry.TYPE_OUTGOING);
             }
-            getContentResolver().insert(RecorderContract.getContentUri(RecorderContract.PATH_RECORD), contentValues);
+            Uri uri = getContentResolver().insert(RecorderContract.getContentUri(RecorderContract.PATH_RECORD), contentValues);
+
+            Toast.makeText(this, "REJECT || DISCO", Toast.LENGTH_LONG).show();
+            hideRecordingNotification(conversationDuration, uri);
 
             wasIncoming = false;
         }
 
+    }
 
+    private void showRecordingNotification(){
+        updateNotification = true;
+        updateNotification();
+    }
+
+    private void hideRecordingNotification(int duration, Uri uri){
+        updateNotification = false;
+        notificationManager.cancel("TAG", NOTIFICATION_RECORDING);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_action_call_dark)
+                        .setContentTitle("Call was recorded " + phoneNumber)
+                        .setContentText(Utils.formatDuration(duration))
+                        .setAutoCancel(true);
+
+        int id = Integer.parseInt(uri.getLastPathSegment());
+        Intent intent = new Intent(this, RecordingDetailActivity.class);
+        intent.setData(
+                Uri.withAppendedPath(RecorderContract.getContentUri(RecorderContract.PATH_RECORD_WITH_CONTACT),
+                        String.valueOf(id)));
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+
+        taskStackBuilder.addParentStack(RecordingDetailActivity.class);
+        taskStackBuilder.addNextIntent(intent);
+
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(2, PendingIntent.FLAG_ONE_SHOT);
+
+        mBuilder.setContentIntent(pendingIntent);
+        //NotificationManager notificationManager =
+        //        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // mId allows you to update the notification later on.
+        notificationManager.notify("TAG", NOTIFICATION_CALL_RECORDED, mBuilder.build());
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            updateNotification();
+        }
+    };
+
+    private void updateNotification(){
+        if(updateNotification) {
+            int currentDuration = (int) ((System.currentTimeMillis() - startedTime) / 1000);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_recording_icon)
+                            .setContentTitle("Recording " + Utils.formatDuration(currentDuration))
+                            .setContentText(phoneNumber);
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT);
+            mBuilder.setContentIntent(pendingIntent);
+            notificationManager.notify("TAG", NOTIFICATION_RECORDING, mBuilder.build());
+        }
+        if(updateNotification){
+            handler.postDelayed(runnable, 1000);
+        }
     }
 
     @Override

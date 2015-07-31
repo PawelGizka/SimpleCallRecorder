@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="options_mode_array">
-        <item>Record Everything</item>
-        <item>Record only selected</item>
-    </string-array>
+
 
     <string-array name="settings_recording_source">
         <item>VOICE CALL</item>

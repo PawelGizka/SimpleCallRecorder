@@ -330,7 +330,6 @@ public class RecordingService extends Service {
             if(audiofile.length() < 20 && recorderMic != null){
                 path = audioFileMic.getAbsolutePath();
                 recordingVoiceError = 1;
-                recordingSource = 3;
                 audiofile.delete();
                 SharedPreferences.Editor editor = userPref.edit();
                 editor.putString(PreferanceStrings.USER_RECORDING_SOURCE, "3");

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.pgizka.simplecallrecorder.R;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
@@ -17,6 +18,7 @@ import com.pgizka.simplecallrecorder.data.RecorderContract;
 
 public class ContactsFragment extends Fragment {
     ListView contactsList;
+    TextView emptyText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,6 +26,8 @@ public class ContactsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
         contactsList = (ListView) view.findViewById(R.id.contacts_list);
+        emptyText = (TextView) view.findViewById(R.id.contacts_empty_text);
+        contactsList.setEmptyView(emptyText);
 
         String order = RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME;
         final Cursor mainCursor = getActivity().getContentResolver().query(

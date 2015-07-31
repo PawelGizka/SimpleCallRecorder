@@ -94,7 +94,8 @@ public class ContactsAdapter extends CursorAdapter {
 
         recordCountCursor.moveToPosition(cursor.getPosition());
         int recordNumber = recordCountCursor.getInt(0);
-        viewHolder.numberOfRecordsText.setText(recordNumber + " records");
+        viewHolder.numberOfRecordsText.setText(String.format(context.getResources().
+                getQuantityString(R.plurals.contact_recording_number, recordNumber, recordNumber)));
 
 
         if(displayName != null) {

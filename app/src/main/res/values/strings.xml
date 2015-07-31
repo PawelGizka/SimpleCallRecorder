@@ -6,24 +6,57 @@
     <string name="title_section_settings">Settings</string>
     <string name="title_section_contacts">Contacts</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
-
-    <string name="action_settings">Settings</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <!-- Strings related to options fragment -->
+    <string-array name="options_mode_array">
+        <item>Record Everything</item>
+        <item>Record only selected</item>
+    </string-array>
+
     <string name="options_header_text">Recording calls is currently:</string>
     <string name="options_toggle_button_off">Off</string>
     <string name="options_toggle_button_on">On</string>
+    <string name="options_exceptions">Exceptions</string>
+    <string name="options_add_exceptions_button">Add Exceptions</string>
+    <string name="options_recorded">Recorded</string>
+    <string name="options_add_recorded_button">Add Recorded</string>
+    <string name="options_dialog_add_number_button">Add Number</string>
+    <string name="options_dialog_add_from_contacts_button">Add From Contacts</string>
+    <string name="options_dialog_add_number_hint">Enter phone number</string>
+    <string name="options_dialog_add_number_title">Add phone number</string>
+    <string name="options_empty_everything_text">You didnt add any exceptions.\nEvery call will be recorded.</string>
+    <string name="options_empty_selected_text">You didnt add any contacts to record. Nothing will be recorded.</string>
+
     <string name="title_activity_recording_detail">RecordingDetailActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+    <!-- Strings related to recrodings fragmnet -->
+    <string name="recording_empty_text">You havent got any recordings</string>
+
+    <!-- String related to recording detail fragment -->
+    <string name="recording_detail_delete_button">Delete</string>
+    <string name="recording_detail_share_button">Share</string>
+    <string name="recording_detail_add_notes">Add notes</string>
+    <string name="recording_detail_alert_title">Recording source error</string>
+    <string name="recording_detail_alert_message">Recording using %1$s went wrong, recording
+        was recorded using Microphone. Your phone may not be able to record using %2$s</string>
+
+    <!-- Strings related to contact fragment -->
+    <plurals name="contact_recording_number">
+        <item quantity="one">%1$d recording</item>
+        <item quantity="other">%1$d recordings</item>
+    </plurals>
+    <string name="contact_empty_text">None of your contacts were recorded</string>
+    
+    <!-- Strings related to contact detail fragment-->
+    <string name="contact_detail_add_contact_button">Add Contact</string>
+    <string name="contact_detail_status_recorded">Recorded</string>
+    <string name="contact_detail_status_not_recorded">Not Recorded</string>
+    <string name="contact_detail_status_set_record">Record</string>
+    <string name="contact_detail_status_set_not_record">Not Record</string>
+    
     <string name="title_activity_contact_detail">Contact Details</string>
-    <string name="title_activity_toolbar_test">ToolbarTestActivity</string>
+
 
 </resources>

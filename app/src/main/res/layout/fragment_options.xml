@@ -1,14 +1,20 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context="com.pgizka.simplecallrecorder.options.OptionsFragment">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/options_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="8dp"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,11 +28,12 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/options_header_text"
                 android:id="@+id/textView"
+                android:gravity="center"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 
             <ToggleButton
-                android:layout_width="wrap_content"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:textOff="@string/options_toggle_button_off"
                 android:textOn="@string/options_toggle_button_on"
@@ -39,10 +46,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/options_spinner"
                 android:layout_centerHorizontal="true"
-                android:entries="@array/options_mode_array"
+
                 android:layout_below="@+id/options_toggle_button"
-                android:textSize="60sp"
-                />
+                android:textSize="60sp">
+
+
+            </Spinner>
 
 
         </RelativeLayout>
@@ -55,7 +64,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/options_add_button"
-        android:layout_below="@+id/options_info_text" />
+        android:layout_below="@+id/options_info_text"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        />
 
     <Button
         android:layout_width="match_parent"
@@ -74,7 +86,19 @@
         android:layout_below="@+id/options_card_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:gravity="center"
+        android:id="@+id/options_empty_text"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

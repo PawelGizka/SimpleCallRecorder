@@ -267,10 +267,9 @@ public class RecordingDetailFragment extends Fragment {
         if(recordingError == 1){
             String[] source = getResources().getStringArray(R.array.settings_recording_source);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Recording source error")
-                    .setMessage("Recording using " + source[recordingSource] + " went wrong, recording " +
-                            "was recorded using Microphone. Your phone may not be able to record using " +
-                            source[recordingSource])
+            builder.setTitle(R.string.recording_detail_alert_title)
+                    .setMessage(String.format(getString(R.string.recording_detail_alert_message),
+                            source[recordingSource], source[recordingSource]))
                     .setPositiveButton("Ok", null);
             builder.create().show();
 

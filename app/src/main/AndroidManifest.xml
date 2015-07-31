@@ -71,15 +71,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
         </activity>
-        <activity
-            android:theme="@style/ToolbarTheme"
-            android:parentActivityName=".recordings.RecordingDetailActivity"
-            android:name=".recordings.ToolbarTestActivity"
-            android:label="@string/title_activity_toolbar_test" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".recordings.RecordingDetailActivity" />
-        </activity>
     </application>
 
 </manifest>

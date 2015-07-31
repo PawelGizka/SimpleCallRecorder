@@ -138,7 +138,7 @@
             android:id="@+id/recording_detail_delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/recording_detail_delete_button"
             android:drawableTop="@drawable/ic_action_delete_100"
             app:layout_columnWeight="1"
 
@@ -150,59 +150,19 @@
             android:id="@+id/recording_detail_share_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share"
+            android:text="@string/recording_detail_share_button"
             android:drawableTop="@drawable/ic_action_share"
             app:layout_columnWeight="1"
             >
         </Button>
 
-        <!--
-        <Button
-            android:id="@+id/recording_detail_call_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Call"
-            android:drawableTop="@drawable/ic_action_call_light"
-            app:layout_columnWeight="1"
-            >
-        </Button>
-
-        <Button
-            android:id="@+id/recording_detail_message_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Message"
-            android:drawableTop="@drawable/ic_action_email_light"
-            app:layout_columnWeight="1"
-            >
-        </Button>
-
-        -->
-
-        <!--
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            app:layout_columnWeight="1"
-            >
-        </Button>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            app:layout_columnWeight="1"
-            >
-        </Button>
-        -->
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/recording_detail_notes_edit_text"
-            android:hint="Add notes"
+            android:hint="@string/recording_detail_add_notes"
             app:layout_columnWeight="1"
             app:layout_columnSpan="2"/>
 

@@ -10,6 +10,6 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/options_dialog_add_number_field"
-        android:hint="Enter phone number"
+        android:hint="@string/options_dialog_add_number_hint"
         />
 </LinearLayout>

@@ -26,6 +26,10 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
+    RecordingsFragment recordingsFragment;
+    OptionsFragment optionsFragment;
+    ContactsFragment contactsFragment;
+
     int currentFragment = 0;
 
     @Override
@@ -39,7 +43,7 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         int position = getIntent().getIntExtra("position", 0);
-        onNavigationDrawerItemSelected(position);
+        //onNavigationDrawerItemSelected(position);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -68,11 +72,23 @@ public class MainActivity extends ActionBarActivity
     public Fragment getProperFragment(int position){
         switch (position) {
             case 0:
-                return new RecordingsFragment();
+                if(recordingsFragment == null){
+                    recordingsFragment = new RecordingsFragment();
+                }
+                return recordingsFragment;
+                //return new RecordingsFragment();
             case 1:
-                return new OptionsFragment();
+                if(optionsFragment == null){
+                    optionsFragment = new OptionsFragment();
+                }
+                return optionsFragment;
+                //return new OptionsFragment();
             case 2:
-                return new ContactsFragment();
+                if(contactsFragment == null){
+                    contactsFragment = new ContactsFragment();
+                }
+                return contactsFragment;
+                //return new ContactsFragment();
             default:
                 throw new UnsupportedOperationException("There is no fragment");
         }
@@ -85,7 +101,7 @@ public class MainActivity extends ActionBarActivity
             case 1:
                 return getString(R.string.title_section_options);
             case 2:
-                return getString(R.string.title_section_settings);
+                return getString(R.string.title_section_contacts);
             default:
                 return getTitle().toString();
         }
@@ -106,7 +122,7 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+            //getMenuInflater().inflate(R.menu.main, menu);
             setUpActionBar(getCurrentItemTitle());
             return true;
         }

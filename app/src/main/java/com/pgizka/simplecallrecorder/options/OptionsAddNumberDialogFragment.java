@@ -36,7 +36,7 @@ public class OptionsAddNumberDialogFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.options_dialog_add_number, null, false);
         final EditText phoneField = (EditText) view.findViewById(R.id.options_dialog_add_number_field);
 
-        builder.setTitle("Add phone number")
+        builder.setTitle(R.string.options_dialog_add_number_title)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

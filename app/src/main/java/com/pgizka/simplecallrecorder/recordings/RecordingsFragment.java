@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.pgizka.simplecallrecorder.R;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
@@ -27,6 +28,7 @@ public class RecordingsFragment extends Fragment implements ActionMode.Callback 
     static  final String TAG = RecordingsFragment.class.getSimpleName();
 
     ListView listView;
+    TextView emptyText;
     RecordingsAdapter recordingsAdapter;
 
     ActionMode actionMode;
@@ -44,7 +46,8 @@ public class RecordingsFragment extends Fragment implements ActionMode.Callback 
         View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
         listView = (ListView) view.findViewById(R.id.recordings_list_viev);
-
+        emptyText = (TextView) view.findViewById(R.id.recordings_empty_text);
+        listView.setEmptyView(emptyText);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

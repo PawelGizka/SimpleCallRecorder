@@ -148,11 +148,11 @@ public class ContactDetailActivityFragment extends Fragment implements ActionMod
             recorded = rec == 1 ? true : false;
         }
         if(recorded) {
-            statusText.setText("Recorded");
-            changeStatusButton.setText("Not record");
+            statusText.setText(R.string.contact_detail_status_recorded);
+            changeStatusButton.setText(R.string.contact_detail_status_set_not_record);
         } else {
-            statusText.setText("Not recorded");
-            changeStatusButton.setText("Record");
+            statusText.setText(R.string.contact_detail_status_not_recorded);
+            changeStatusButton.setText(R.string.contact_detail_status_set_record);
         }
 
         if(TextUtils.isEmpty(displayName)){
@@ -230,14 +230,14 @@ public class ContactDetailActivityFragment extends Fragment implements ActionMod
         }
         getActivity().getContentResolver().update(uri, contentValues, null, null);
 
-        if(recorded){
-            recorded = false;
-            statusText.setText("Not Recorded");
-            changeStatusButton.setText("Record");
+        recorded = recorded ? false : true;
+
+        if(recorded) {
+            statusText.setText(R.string.contact_detail_status_recorded);
+            changeStatusButton.setText(R.string.contact_detail_status_set_not_record);
         } else {
-            recorded = true;
-            statusText.setText("Recorded");
-            changeStatusButton.setText("Not Record");
+            statusText.setText(R.string.contact_detail_status_not_recorded);
+            changeStatusButton.setText(R.string.contact_detail_status_set_record);
         }
     }
 

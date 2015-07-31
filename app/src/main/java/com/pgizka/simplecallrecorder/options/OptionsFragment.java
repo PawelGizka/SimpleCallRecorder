@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -30,7 +31,7 @@ public class OptionsFragment extends Fragment {
     ToggleButton toggleButton;
     Spinner spinner;
     ListView listView;
-    TextView infoText;
+    TextView infoText, emptyText;
     Button addButton;
 
     SharedPreferences systemPref;
@@ -54,6 +55,14 @@ public class OptionsFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.options_list_view);
         addButton = (Button) view.findViewById(R.id.options_add_button);
         infoText = (TextView) view.findViewById(R.id.options_info_text);
+        emptyText = (TextView) view.findViewById(R.id.options_empty_text);
+
+        listView.setEmptyView(emptyText);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.options_mode_array, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
+        spinner.setAdapter(adapter);
 
         systemPref = getActivity().getSharedPreferences(PreferanceStrings.SYSTEM_PREFERANCE,
                 Context.MODE_PRIVATE);
@@ -68,12 +77,12 @@ public class OptionsFragment extends Fragment {
 
         if(recordingMode == PreferanceStrings.RECORDING_MODE_EVERYTHING){
             spinner.setSelection(0);
-            infoText.setText("Exceptions");
-            addButton.setText("Add exception");
+            infoText.setText(R.string.options_exceptions);
+            addButton.setText(R.string.options_add_exceptions_button);
         } else {
             spinner.setSelection(1);
-            infoText.setText("Recorded");
-            addButton.setText("Add recorded");
+            infoText.setText(R.string.options_recorded);
+            addButton.setText(R.string.options_add_recorded_button);
         }
 
         toggleButton.setOnClickListener(new View.OnClickListener() {
@@ -165,13 +174,15 @@ public class OptionsFragment extends Fragment {
         if(position == 0) {
             editor.putInt(PreferanceStrings.RECORDING_MODE, PreferanceStrings.RECORDING_MODE_EVERYTHING);
             recordingMode = PreferanceStrings.RECORDING_MODE_EVERYTHING;
-            infoText.setText("Exceptions");
-            addButton.setText("Add exception");
+            infoText.setText(R.string.options_exceptions);
+            addButton.setText(R.string.options_add_exceptions_button);
+            emptyText.setText(R.string.options_empty_everything_text);
         } else {
             editor.putInt(PreferanceStrings.RECORDING_MODE, PreferanceStrings.RECORDING_MODE_ONLY_SELECTED);
             recordingMode = PreferanceStrings.RECORDING_MODE_ONLY_SELECTED;
-            infoText.setText("Recorded");
-            addButton.setText("Add recorded");
+            infoText.setText(R.string.options_recorded);
+            addButton.setText(R.string.options_add_recorded_button);
+            emptyText.setText(R.string.options_empty_selected_text);
         }
         editor.commit();
         onSelectMode();

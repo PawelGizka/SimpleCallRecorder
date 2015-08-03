@@ -56,4 +56,33 @@
 
     <string name="title_activity_contact_detail">Szczegóły kontaktu</string>
 
+
+    <!-- Strings related to delete alert dialog -->
+    <string name="delete_alert_title">Czy na pewno chcesz usunąć </string>
+    <string name="delete_alert_message">To także skasuje pliki zawierające nagranie</string>
+    <string name="delete_delete_text">Skasuj</string>
+
+    <!-- Strings related to preferences -->
+    <string name="pref_category_general">Główne</string>
+    <string name="pref_recording_source">Źródło Nagrywania</string>
+    <string name="pref_recording_format">Format Nagrywania</string>
+    <string name="pref_increase_volume">Zwiększ Głośność</string>
+    <string name="pref_increase_volume_summary">Zwiększ głośność w trakcie każdej rozmowy</string>
+    <string name="pref_recording_path">Scieżka Nagrywania</string>
+
+    <string name="pref_category_notifications">Powiadomienia</string>
+    <string name="pref_notification_during_call">Podczas Rozmowy</string>
+    <string name="pref_notification_during_call_summary">Pokazuj powiadomienie kiedy rozmowa jest nagywana</string>
+    <string name="pref_notification_post_call">Po Rozmowie</string>
+    <string name="pref_notification_post_call_summary">Pokazuj powiadomienie o nagraniu rozmowy</string>
+
+    <!-- Strings related to recording service -->
+    <string name="service_notification_recording">Nagrywanie </string>
+    <string name="service_notification_call_recorded">Rozmowa została nagrana </string>
+
+    <!-- Strings related to Nothing -->
+    <string name="cancel">Anuluj</string>
+
+
+
 </resources>

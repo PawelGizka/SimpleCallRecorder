@@ -31,6 +31,7 @@ import com.pgizka.simplecallrecorder.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.PhantomReference;
 import java.text.SimpleDateFormat;
 
 
@@ -45,6 +46,9 @@ public class RecordingService extends Service {
 
     Bundle bundle;
     String state;
+
+    SharedPreferences systemPref;
+    SharedPreferences userPref;
 
     String phoneNumber;
     boolean wasIncoming = false;
@@ -73,8 +77,8 @@ public class RecordingService extends Service {
 
     private void processCall(Intent intent){
 
-        SharedPreferences systemPref = getSharedPreferences(PreferanceStrings.SYSTEM_PREFERANCE, Context.MODE_PRIVATE);
-        SharedPreferences userPref = PreferenceManager.getDefaultSharedPreferences(this);
+        systemPref = getSharedPreferences(PreferanceStrings.SYSTEM_PREFERANCE, Context.MODE_PRIVATE);
+        userPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean recordingEnabled = systemPref.getBoolean(PreferanceStrings.RECORDING_ENABLED, false);
         if(!recordingEnabled){
@@ -161,7 +165,7 @@ public class RecordingService extends Service {
             recordingSource = Integer.parseInt(userPref.getString(PreferanceStrings.USER_RECORDING_SOURCE, "0"));
             int recordingFormat = Integer.parseInt(userPref.getString(PreferanceStrings.USER_RECORDING_FORMAT, "0"));
             String recordingPath = userPref.getString(PreferanceStrings.USER_RECORDING_PATH, "/sdcard/simpleCallRecorder");
-            boolean turnOnPhone = userPref.getBoolean(PreferanceStrings.USER_TURN_ON_PHONE, false);
+            //boolean turnOnPhone = userPref.getBoolean(PreferanceStrings.USER_TURN_ON_PHONE, false);
             boolean increaseVolume = userPref.getBoolean(PreferanceStrings.USER_TURN_UP_VOLUME, true);
 
             recorder = new MediaRecorder();
@@ -226,11 +230,12 @@ public class RecordingService extends Service {
                 audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
                         audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
             }
+            /*
             if(turnOnPhone){
                 Log.d(TAG, "turn speaker on");
                 audioManager.setMode(AudioManager.MODE_IN_CALL);
                 audioManager.setSpeakerphoneOn(true);
-            }
+            }*/
 
             Log.d(TAG, "Call started");
 
@@ -337,7 +342,9 @@ public class RecordingService extends Service {
             } else {
                 path = audiofile.getAbsolutePath();
                 recordingVoiceError = 0;
-                audioFileMic.delete();
+                if(recorderMic != null) {
+                    audioFileMic.delete();
+                }
             }
 
             ContentValues contentValues = new ContentValues();
@@ -363,18 +370,26 @@ public class RecordingService extends Service {
     }
 
     private void showRecordingNotification(){
-        updateNotification = true;
-        updateNotification();
+        boolean showNotifiaction = userPref.getBoolean(PreferanceStrings.USER_NOTIFICATION_DURING_CALL, true);
+        if(showNotifiaction) {
+            updateNotification = true;
+            updateNotification();
+        }
     }
 
     private void hideRecordingNotification(int duration, Uri uri){
         updateNotification = false;
         notificationManager.cancel("TAG", NOTIFICATION_RECORDING);
 
+        boolean showNotification = userPref.getBoolean(PreferanceStrings.USER_NOTIFICATION_POST_CALL, true);
+        if(!showNotification){
+            return;
+        }
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_action_call_dark)
-                        .setContentTitle("Call was recorded " + phoneNumber)
+                        .setContentTitle(getString(R.string.service_notification_call_recorded) + " " + phoneNumber)
                         .setContentText(Utils.formatDuration(duration))
                         .setAutoCancel(true);
 
@@ -412,7 +427,8 @@ public class RecordingService extends Service {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_recording_icon)
-                            .setContentTitle("Recording " + Utils.formatDuration(currentDuration))
+                            .setContentTitle(getString(R.string.service_notification_recording) + " " +
+                                    Utils.formatDuration(currentDuration))
                             .setContentText(phoneNumber);
             Intent intent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT);

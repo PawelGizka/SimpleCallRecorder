@@ -13,5 +13,6 @@ public class PreferanceStrings {
 	public static final String USER_TURN_ON_PHONE = "userTurnOnPhone";
 	public static final String USER_TURN_UP_VOLUME = "userTurnUpVolume";
 	public static final String USER_RECORDING_PATH = "userRecordingPath";
-
+	public static final String USER_NOTIFICATION_DURING_CALL = "userNotificationDuringCall";
+	public static final String USER_NOTIFICATION_POST_CALL = "userNotificationPostCall";
 }

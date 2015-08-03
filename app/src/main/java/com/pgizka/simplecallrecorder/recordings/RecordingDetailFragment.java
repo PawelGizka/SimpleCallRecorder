@@ -151,6 +151,7 @@ public class RecordingDetailFragment extends Fragment {
 
         if(savedInstanceState != null){
             currentPosition = savedInstanceState.getInt("playPosition", 0);
+            isPlaybackOn = savedInstanceState.getBoolean("playOn", false);
             Log.d(TAG, "saved state is not null current position " + currentPosition);
         } else {
             Log.d(TAG, "state is null");
@@ -176,7 +177,9 @@ public class RecordingDetailFragment extends Fragment {
 
         if(currentPosition > 0){
             mediaPlayer.seekTo(currentPosition);
-            play();
+            if(isPlaybackOn) {
+                play();
+            }
         }
 
     }
@@ -207,6 +210,7 @@ public class RecordingDetailFragment extends Fragment {
         if(currentPosition > 0){
             Log.d(TAG, "current position is " + currentPosition);
             outState.putInt("playPosition", currentPosition);
+            outState.putBoolean("playOn", isPlaybackOn);
         }
         super.onSaveInstanceState(outState);
     }
@@ -339,6 +343,7 @@ public class RecordingDetailFragment extends Fragment {
     private void onDelete(boolean showAlertDialog){
         if(showAlertDialog){
             RecordingsDeleteAlertDialog dialog = new RecordingsDeleteAlertDialog();
+            dialog.setCount(1);
             dialog.setOnDeleteListener(new RecordingsDeleteAlertDialog.OnDeleteListener() {
                 @Override
                 public void onUserClickedDelete() {

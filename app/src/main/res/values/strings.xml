@@ -1,4 +1,7 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
+
     <string name="app_name">Simple Call Recorder</string>
 
     <string name="title_section_recordings">Recordings</string>
@@ -57,6 +60,32 @@
     <string name="contact_detail_status_set_not_record">Not Record</string>
     
     <string name="title_activity_contact_detail">Contact Details</string>
+
+    <!-- Strings related to delete alert dialog -->
+    <string name="delete_alert_title">Are you sure you want to delete </string>
+    <string name="delete_alert_message">This wil also delte recoding file</string>
+    <string name="delete_delete_text">Delete</string>
+
+    <!-- Strings related to preferences -->
+    <string name="pref_category_general">General</string>
+    <string name="pref_recording_source">Recording Source</string>
+    <string name="pref_recording_format">Recording Format</string>
+    <string name="pref_increase_volume">Increase Volume</string>
+    <string name="pref_increase_volume_summary">Increase volume at every call</string>
+    <string name="pref_recording_path">Recording Path</string>
+
+    <string name="pref_category_notifications">Notifications</string>
+    <string name="pref_notification_during_call">During Call</string>
+    <string name="pref_notification_during_call_summary">Show notification when phone call is being recorded</string>
+    <string name="pref_notification_post_call">After Call</string>
+    <string name="pref_notification_post_call_summary">Show notification after phone call has been recorded</string>
+
+    <!-- Strings related to recording service -->
+    <string name="service_notification_recording">Recording </string>
+    <string name="service_notification_call_recorded">Call was recorded </string>
+
+    <!-- Strings related to Nothing -->
+    <string name="cancel">Cancel</string>
 
 
 </resources>

@@ -33,10 +33,12 @@ import com.pgizka.simplecallrecorder.R;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
 import com.pgizka.simplecallrecorder.main.MainActivity;
 import com.pgizka.simplecallrecorder.recordings.RecordingDetailActivity;
+import com.pgizka.simplecallrecorder.recordings.RecordingsDeleteAlertDialog;
 import com.pgizka.simplecallrecorder.util.PreferanceStrings;
 import com.pgizka.simplecallrecorder.util.UpdateUserData;
 import com.pgizka.simplecallrecorder.util.Utils;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -274,18 +276,42 @@ public class ContactDetailActivityFragment extends Fragment implements ActionMod
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_mode_delete:
-                ArrayList<Long> selectedIds = adapter.getSelectedIds();
-                for(Long id : selectedIds){
-                    Uri uri = Uri.withAppendedPath(RecorderContract.getContentUri(RecorderContract.PATH_RECORD),
-                            Long.toString(id));
-                    getActivity().getContentResolver().delete(uri, null, null);
-                }
-                actionMode.finish();
-                updateListView();
+                onDelete(false);
                 return true;
         }
 
         return false;
+    }
+
+
+    private void onDelete(boolean delete){
+        if(delete){
+            ArrayList<Long> selectedIds = adapter.getSelectedIds();
+            for(Long id : selectedIds){
+                Uri uri = Uri.withAppendedPath(RecorderContract.getContentUri(RecorderContract.PATH_RECORD),
+                        Long.toString(id));
+                Cursor cursor = getActivity().getContentResolver().query(
+                        uri, new String[]{RecorderContract.RecordEntry.COLUMN_PATH}, null, null, null);
+                cursor.moveToFirst();
+                String path = cursor.getString(cursor.getColumnIndex(RecorderContract.RecordEntry.COLUMN_PATH));
+                File file = new File(path);
+                file.delete();
+                getActivity().getContentResolver().delete(uri, null, null);
+            }
+            actionMode.finish();
+            updateListView();
+        } else {
+            RecordingsDeleteAlertDialog alertDialog = new RecordingsDeleteAlertDialog();
+            alertDialog.setCount(adapter.getSelectedCount());
+            alertDialog.setOnDeleteListener(new RecordingsDeleteAlertDialog.OnDeleteListener() {
+                @Override
+                public void onUserClickedDelete() {
+                    onDelete(true);
+                }
+            });
+            alertDialog.show(getActivity().getSupportFragmentManager(), "TAG");
+        }
+
     }
 
     @Override

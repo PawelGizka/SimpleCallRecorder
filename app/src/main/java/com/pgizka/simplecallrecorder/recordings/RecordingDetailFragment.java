@@ -373,7 +373,11 @@ public class RecordingDetailFragment extends Fragment {
         String audioPath = cursor.getString(cursor.getColumnIndex(RecorderContract.RecordEntry.COLUMN_PATH));
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setDataAndType(Uri.fromFile(new File(audioPath)), "audio/*");
+        //intent.setDataAndType(Uri.fromFile(new File(audioPath)), "audio/*");
+
+        Uri uri = Uri.parse(audioPath);
+        intent.setType("audio/*");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         startActivity(intent);
     }

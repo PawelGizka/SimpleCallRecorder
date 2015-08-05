@@ -38,8 +38,8 @@
                 android:layout_margin="0dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
                 android:id="@+id/recording_item_display_name_text"

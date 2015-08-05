@@ -51,7 +51,7 @@ public class Utils {
     }
 
     public static String formatTime(long time){
-        SimpleDateFormat format = new SimpleDateFormat("kk.mm");
+        SimpleDateFormat format = new SimpleDateFormat("kk:mm");
         return format.format(time);
     }
 

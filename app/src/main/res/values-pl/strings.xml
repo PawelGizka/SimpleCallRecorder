@@ -80,6 +80,11 @@
     <string name="service_notification_recording">Nagrywanie </string>
     <string name="service_notification_call_recorded">Rozmowa została nagrana </string>
 
+    <!-- Strings related to launcher antivity -->
+    <string name="launcher_main_text">Nagrywanie rozmów w niektórych krajach bez uprzedzenia rozmówcy może być nielegalne.
+        Przed użyciem tej aplikacji pownineś zapoznać się z aktualnym stanem prawnym w twoim kraju.</string>
+    <string name="title_activity_launcher">Nota Prawna</string>
+
     <!-- Strings related to Nothing -->
     <string name="cancel">Anuluj</string>
 

@@ -84,8 +84,8 @@ public class NavigationDrawerFragment extends Fragment {
             Log.d(TAG, "saved instance is not null current position " + mCurrentSelectedPosition);
         } else {
             Log.d(TAG, "saved instance is null");
+            mCurrentSelectedPosition = getActivity().getIntent().getIntExtra("position", mCurrentSelectedPosition);
         }
-        mCurrentSelectedPosition = getActivity().getIntent().getIntExtra("position", mCurrentSelectedPosition);
 
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);

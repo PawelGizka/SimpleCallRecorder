@@ -262,13 +262,10 @@ public class RecordingService extends Service {
             }
 
             Log.d(TAG, "file name is: " + fileName);
-            try {
-                audiofile = File.createTempFile(fileName, audioSufix, sampleDir);
-                if(recorderMic != null){
-                    audioFileMic = File.createTempFile(fileNameMic, audioSufix, sampleDir);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            audiofile = new File(sampleDir, fileName + audioSufix);
+            if(recorderMic != null){
+                audioFileMic = new File(sampleDir, fileNameMic + audioSufix);
             }
 
             recorder.setOutputFile(audiofile.getAbsolutePath());

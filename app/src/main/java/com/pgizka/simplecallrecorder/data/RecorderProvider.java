@@ -70,10 +70,12 @@ public class RecorderProvider extends ContentProvider {
                 RecorderContract.ContactEntry.TABLE_NAME, null, contactContectValues);
         ContentValues recordContentValues = new ContentValues();
         recordContentValues.put(RecorderContract.RecordEntry.COLUMN_CONTACT_KEY, id);
+        recordContentValues.put(RecorderContract.RecordEntry.COLUMN_PATH, "nic");
+        recordContentValues.put(RecorderContract.RecordEntry.COLUMN_DATE, System.currentTimeMillis());
         dbHelper.getWritableDatabase().insert(
                 RecorderContract.RecordEntry.TABLE_NAME, null, recordContentValues);
 
-        query(RecorderContract.getContentUri(RecorderContract.PATH_RECORD_WITH_CONTACT), null, null, null, null);*/
+        query(RecorderContract.getContentUri(RecorderContract.PATH_RECORD_WITH_CONTACT), null, null, null, null); */
         return false;
     }
 

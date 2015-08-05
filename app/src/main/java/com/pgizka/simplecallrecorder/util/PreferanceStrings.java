@@ -6,6 +6,7 @@ public class PreferanceStrings {
 	public static final String RECORDING_MODE = "recordingMode";
 	public static final int RECORDING_MODE_EVERYTHING = 0;
 	public static final int RECORDING_MODE_ONLY_SELECTED = 1;
+	public static final String LAUNCHER_SEEN = "launcherSeen";
 
 	//User preferences
 	public static final String USER_RECORDING_SOURCE = "userRecordingSource";

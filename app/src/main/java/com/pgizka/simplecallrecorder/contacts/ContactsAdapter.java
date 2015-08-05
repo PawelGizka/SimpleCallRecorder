@@ -21,6 +21,7 @@ import com.pgizka.simplecallrecorder.data.RecorderContract;
 import com.pgizka.simplecallrecorder.util.Utils;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Paweł on 2015-07-21.
@@ -90,7 +91,7 @@ public class ContactsAdapter extends CursorAdapter {
             viewHolder.mainImage.setImageResource(R.drawable.defult_contact_image);
         }
 
-        viewHolder.lastRecordDateText.setText(Utils.formatTime(date) + " " + Utils.formatDate(date));
+        viewHolder.lastRecordDateText.setText(new SimpleDateFormat("kk:mm EEE dd MMM").format(date));
 
         recordCountCursor.moveToPosition(cursor.getPosition());
         int recordNumber = recordCountCursor.getInt(0);

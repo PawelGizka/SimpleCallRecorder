@@ -84,8 +84,15 @@
     <string name="service_notification_recording">Recording </string>
     <string name="service_notification_call_recorded">Call was recorded </string>
 
+    <!-- Strings related to launcher antivity -->
+    <string name="launcher_main_text">You should contact lawyer before using this app</string>
+    <string name="title_activity_launcher">Law Notes</string>
+
     <!-- Strings related to Nothing -->
     <string name="cancel">Cancel</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 
 </resources>

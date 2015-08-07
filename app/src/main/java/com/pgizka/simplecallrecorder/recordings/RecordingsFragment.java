@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -102,7 +101,7 @@ public class RecordingsFragment extends Fragment implements ActionMode.Callback 
     }
 
     private void setActionModeTitle(){
-        actionMode.setTitle(String.valueOf(recordingsAdapter.getSelectedCount()) + " " + "selected");
+        actionMode.setTitle(String.format(getString(R.string.selected), recordingsAdapter.getSelectedCount()));
     }
 
     @Override

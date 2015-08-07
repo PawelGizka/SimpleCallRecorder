@@ -42,7 +42,7 @@ public class RecordingService extends Service {
 
     MediaRecorder recorder, recorderMic;
     File audiofile, audioFileMic;
-    boolean recordstarted = false;
+    boolean recordstarted = false, recorderThrewException = false;
 
     Bundle bundle;
     String state;
@@ -76,6 +76,12 @@ public class RecordingService extends Service {
     }
 
     private void processCall(Intent intent){
+
+        if(intent == null){
+            Log.d(TAG, "intent is null");
+            Toast.makeText(this, "intent is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         systemPref = getSharedPreferences(PreferanceStrings.SYSTEM_PREFERANCE, Context.MODE_PRIVATE);
         userPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -129,7 +135,7 @@ public class RecordingService extends Service {
         if(contactCursor.getCount() > 0){
             contactCursor.moveToFirst();
             recorded = contactCursor.getInt(contactCursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_RECORDED));
-            recorded = contactCursor.getInt(contactCursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_IGNORED));
+            ignored = contactCursor.getInt(contactCursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_IGNORED));
         }
 
         boolean canRecord = false;
@@ -214,15 +220,17 @@ public class RecordingService extends Service {
                     }
                     break;
                 case 2:
-                    recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                    audioSufix = ".aac";
+                    recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                    audioSufix = ".mp4";
                     if(recorderMic != null){
-                        recorderMic.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-                        recorderMic.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                        recorderMic.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                        recorderMic.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
                     }
                     break;
             }
+
+
 
             AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
             if(increaseVolume){
@@ -284,7 +292,12 @@ public class RecordingService extends Service {
                 e.printStackTrace();
                 Toast.makeText(this, "Recorder threw exception", Toast.LENGTH_LONG).show();
             }
-            recorder.start();
+            try {
+                recorder.start();
+            } catch(Exception e){
+                e.printStackTrace();
+                recorderThrewException = true;
+            }
             if(recorderMic != null){
                 recorderMic.start();
             }
@@ -293,7 +306,9 @@ public class RecordingService extends Service {
 
             if (recordstarted) {
                 Log.d(TAG, "recordre stoped");
-                recorder.stop();
+                if(!recorderThrewException) {
+                    recorder.stop();
+                }
                 recorder.release();
                 if(recorderMic != null){
                     recorderMic.stop();
@@ -329,7 +344,7 @@ public class RecordingService extends Service {
             //check wheater recording from source other then mic was successful
             String path;
             int recordingVoiceError;
-            if(audiofile.length() < 20 && recorderMic != null){
+            if((recorderThrewException || audiofile.length() < 20)  && recorderMic != null){
                 path = audioFileMic.getAbsolutePath();
                 recordingVoiceError = 1;
                 audiofile.delete();
@@ -343,6 +358,7 @@ public class RecordingService extends Service {
                     audioFileMic.delete();
                 }
             }
+            recorderThrewException = false;
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(RecorderContract.RecordEntry.COLUMN_CONTACT_KEY, contactId);

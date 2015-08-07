@@ -90,6 +90,7 @@
 
     <!-- Strings related to Nothing -->
     <string name="cancel">Cancel</string>
+    <string name="selected">Selected: %1$d</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

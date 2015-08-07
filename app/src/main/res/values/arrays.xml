@@ -21,7 +21,7 @@
     <string-array name="settigns_recording_format">
         <item>AMR</item>
         <item>3GPP</item>
-        <item>AAC</item>
+        <item>MP4</item>
     </string-array>
 
     <string-array name="settings_redording_format_values">

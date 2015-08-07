@@ -87,7 +87,7 @@
 
     <!-- Strings related to Nothing -->
     <string name="cancel">Anuluj</string>
-
+    <string name="selected">Wybrano: %1$d</string>
 
 
 </resources>

@@ -29,7 +29,8 @@ public class ContactsFragment extends Fragment {
         emptyText = (TextView) view.findViewById(R.id.contacts_empty_text);
         contactsList.setEmptyView(emptyText);
 
-        String order = RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME;
+        String order = RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME + ", " +
+                        RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER;
         final Cursor mainCursor = getActivity().getContentResolver().query(
                 RecorderContract.getContentUri(RecorderContract.PATH_RECORD_WITH_CONTACT),
                 null, RecorderContract.ConactWithOneRecordWhere, null, order);

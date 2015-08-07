@@ -201,7 +201,7 @@ public class ContactDetailActivityFragment extends Fragment implements ActionMod
     }
 
     private void setActionModeTitle(){
-        actionMode.setTitle(String.valueOf(adapter.getSelectedCount()) + " " + "selected");
+        actionMode.setTitle(String.format(getString(R.string.selected), adapter.getSelectedCount()));
     }
 
     private void updateListView(){

@@ -88,14 +88,6 @@ public class RecordingDetailFragment extends Fragment {
         seekBar = (SeekBar) view.findViewById(R.id.recording_detail_seek_bar);
         notesEditText = (EditText) view.findViewById(R.id.recording_detail_notes_edit_text);
 
-        /*
-        messageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onMessage();
-            }
-        }); */
-
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,18 +101,18 @@ public class RecordingDetailFragment extends Fragment {
                 onShare();
             }
         });
-        /*
-        callButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCall();
-            }
-        });*/
 
         playPauseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPlayPauseImage();
+            }
+        });
+
+        mainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMainImage();
             }
         });
 
@@ -380,6 +372,14 @@ public class RecordingDetailFragment extends Fragment {
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         startActivity(intent);
+    }
+
+    private void onMainImage(){
+        Intent intent = new Intent();
+        intent.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
+        intent.setData(Uri.fromParts("tel", phoneNumber, null));
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, phoneNumber);
+        getActivity().startActivity(intent);
     }
 
     @Override

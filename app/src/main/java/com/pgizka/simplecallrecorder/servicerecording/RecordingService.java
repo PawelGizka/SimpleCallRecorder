@@ -27,6 +27,7 @@ import com.pgizka.simplecallrecorder.main.MainActivity;
 import com.pgizka.simplecallrecorder.recordings.RecordingDetailActivity;
 import com.pgizka.simplecallrecorder.util.PreferanceStrings;
 import com.pgizka.simplecallrecorder.data.RecorderContract;
+import com.pgizka.simplecallrecorder.util.UpdateUserData;
 import com.pgizka.simplecallrecorder.util.Utils;
 
 import java.io.File;
@@ -96,7 +97,7 @@ public class RecordingService extends Service {
         if (Intent.ACTION_NEW_OUTGOING_CALL.equals(intent.getAction())) {
             phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
             Log.d(TAG, "outgoing,ringing:" + phoneNumber);
-            Toast.makeText(this, "outgoing,ringing:" + phoneNumber, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "outgoing,ringing:" + phoneNumber, Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "it wasnt outgoing call");
         }
@@ -118,7 +119,7 @@ public class RecordingService extends Service {
         if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
             wasIncoming = true;
             phoneNumber = bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-            Toast.makeText(this, "Icoming ", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Icoming ", Toast.LENGTH_LONG).show();
         }
 
         phoneNumber = Utils.normalizePhoneNumber(phoneNumber);
@@ -247,7 +248,7 @@ public class RecordingService extends Service {
 
             Log.d(TAG, "Call started");
 
-            Toast.makeText(this, "Call started", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Call started", Toast.LENGTH_LONG).show();
             startedTime = System.currentTimeMillis();
             showRecordingNotification();
 
@@ -336,6 +337,7 @@ public class RecordingService extends Service {
                         contentValues);
                 Log.d(TAG, "Last path segment is: " + uri.getLastPathSegment());
                 contactId = Integer.parseInt(uri.getLastPathSegment());
+                new UpdateUserData(this).execute();
             } else {
                 contactCursor.moveToFirst();
                 contactId = contactCursor.getInt(contactCursor.getColumnIndex(RecorderContract.ContactEntry._ID));
@@ -374,7 +376,7 @@ public class RecordingService extends Service {
             }
             Uri uri = getContentResolver().insert(RecorderContract.getContentUri(RecorderContract.PATH_RECORD), contentValues);
 
-            Toast.makeText(this, "REJECT || DISCO", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "REJECT || DISCO", Toast.LENGTH_LONG).show();
             hideRecordingNotification(conversationDuration, uri);
 
             wasIncoming = false;

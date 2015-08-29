@@ -15,6 +15,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -250,9 +251,13 @@ public class SelectContactDialogFragment extends DialogFragment {
             String displayName = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(RecorderContract.ContactEntry.COLUMN_PHONE_NUMBER));
 
-            viewHolder.displayName.setText(displayName);
-            viewHolder.phoneText.setText(phoneNumber);
-
+            if(TextUtils.isEmpty(displayName)){
+                viewHolder.displayName.setText(phoneNumber);
+                viewHolder.phoneText.setText("");
+            } else {
+                viewHolder.displayName.setText(displayName);
+                viewHolder.phoneText.setText(phoneNumber);
+            }
         }
     }
 

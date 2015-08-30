@@ -19,10 +19,11 @@ public class Launcher extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences systemPref = getSharedPreferences(PreferanceStrings.SYSTEM_PREFERANCE, Context.MODE_PRIVATE);
-        if(systemPref.getBoolean(PreferanceStrings.LAUNCHER_SEEN, false)){
+        if(true /*systemPref.getBoolean(PreferanceStrings.LAUNCHER_SEEN, false)*/){
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
+            /*
             setContentView(R.layout.activity_launcher);
             Button okButton = (Button) findViewById(R.id.launcher_ok_button);
             okButton.setOnClickListener(new View.OnClickListener() {
@@ -34,7 +35,7 @@ public class Launcher extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }
-            });
+            })*/
         }
 
     }
